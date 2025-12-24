@@ -1,0 +1,12 @@
+{
+  "session_id": "20251224_102142",
+  "start_time": "2025-12-24T10:23:00.232178",
+  "end_time": "2025-12-24T10:23:00.232201",
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "Hello! I'm Invoice Manager, your assistant for Simple Invoice Manager. How can I help you today?",
+      "type": "welcome"
+    }
+  ]
+}

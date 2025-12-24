@@ -1,0 +1,53 @@
+{
+  "session_id": "20251224_095725",
+  "start_time": "2025-12-24T09:57:25.612641",
+  "end_time": "2025-12-24T09:59:18.511981",
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "Hello! I'm your AI voice assistant. I'm here to help you with any questions or conversations you'd like to have. How can I assist you today?",
+      "timestamp": "2025-12-24T09:57:25.612641",
+      "type": "welcome"
+    },
+    {
+      "role": "user",
+      "content": "Hello.",
+      "timestamp": "2025-12-24T09:57:36.356675"
+    },
+    {
+      "role": "assistant",
+      "content": "Hi there! How’s your day going?",
+      "timestamp": "2025-12-24T09:57:37.867179"
+    },
+    {
+      "role": "user",
+      "content": "Is good. How about you?",
+      "timestamp": "2025-12-24T09:57:48.226245"
+    },
+    {
+      "role": "assistant",
+      "content": "I'm doing well, thanks for asking! What’s on your mind today?",
+      "timestamp": "2025-12-24T09:57:49.631503"
+    },
+    {
+      "role": "user",
+      "content": "Why?",
+      "timestamp": "2025-12-24T09:58:05.303189"
+    },
+    {
+      "role": "assistant",
+      "content": "I’m glad to hear you’re doing well! I’m always here to help you out or chat about anything you like. Is there something specific you’re curious about?",
+      "timestamp": "2025-12-24T09:58:07.490589"
+    },
+    {
+      "role": "user",
+      "content": "No, thank you.",
+      "timestamp": "2025-12-24T09:58:26.256709"
+    },
+    {
+      "role": "assistant",
+      "content": "You're welcome! If you think of anything later, just let me know. Enjoy your day!",
+      "timestamp": "2025-12-24T09:58:28.162873"
+    }
+  ]
+}

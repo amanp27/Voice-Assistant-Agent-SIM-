@@ -1,0 +1,63 @@
+{
+  "session_id": "20251223_161943",
+  "start_time": "2025-12-23T16:19:43.305799",
+  "end_time": "2025-12-23T16:22:16.078353",
+  "messages": [
+    {
+      "role": "assistant",
+      "content": "Hello! I'm your AI voice assistant. I'm here to help you with any questions or conversations you'd like to have. How can I assist you today?",
+      "timestamp": "2025-12-23T16:19:43.305799",
+      "type": "welcome"
+    },
+    {
+      "role": "user",
+      "content": "Hello.",
+      "timestamp": "2025-12-23T16:20:05.943123"
+    },
+    {
+      "role": "assistant",
+      "content": "Hi there! How’s your day going?",
+      "timestamp": "2025-12-23T16:20:07.817669"
+    },
+    {
+      "role": "user",
+      "content": "Hello.",
+      "timestamp": "2025-12-23T16:20:12.945070"
+    },
+    {
+      "role": "assistant",
+      "content": "Hello again! What’s on your mind?",
+      "timestamp": "2025-12-23T16:20:14.591145"
+    },
+    {
+      "role": "user",
+      "content": "One.",
+      "timestamp": "2025-12-23T16:20:19.694004"
+    },
+    {
+      "role": "assistant",
+      "content": "Are you counting something, or is there something specific you’d like to talk about?",
+      "timestamp": "2025-12-23T16:20:21.470582"
+    },
+    {
+      "role": "user",
+      "content": "We are the.",
+      "timestamp": "2025-12-23T16:20:27.247287"
+    },
+    {
+      "role": "assistant",
+      "content": "It sounds like you might be quoting something. Can you tell me a bit more about it?",
+      "timestamp": "2025-12-23T16:20:28.121947"
+    },
+    {
+      "role": "user",
+      "content": "Thank you.",
+      "timestamp": "2025-12-23T16:20:39.847286"
+    },
+    {
+      "role": "assistant",
+      "content": "You’re welcome! If you need anything else, just let me know!",
+      "timestamp": "2025-12-23T16:20:40.630898"
+    }
+  ]
+}

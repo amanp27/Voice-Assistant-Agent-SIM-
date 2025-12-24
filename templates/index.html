@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Voice Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .status-bar {
+            background: #f7f7f7;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background: #ccc;
+        }
+
+        .status-indicator.connected {
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .mic-button {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px auto;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .mic-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .mic-button.recording {
+            background: #e74c3c;
+            animation: recording-pulse 1s infinite;
+        }
+
+        @keyframes recording-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .transcript-area {
+            background: #f7f7f7;
+            border-radius: 10px;
+            padding: 20px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .message {
+            margin: 15px 0;
+            padding: 10px 15px;
+            border-radius: 10px;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            background: #667eea;
+            color: white;
+            margin-left: 20%;
+            text-align: right;
+        }
+
+        .message.assistant {
+            background: #e8eaf6;
+            color: #333;
+            margin-right: 20%;
+        }
+
+        .message-label {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            opacity: 0.7;
+        }
+
+        .wave {
+            display: inline-block;
+            width: 5px;
+            height: 20px;
+            background: #667eea;
+            margin: 0 2px;
+            border-radius: 3px;
+            animation: wave 1s infinite ease-in-out;
+        }
+
+        .wave:nth-child(2) { animation-delay: 0.1s; }
+        .wave:nth-child(3) { animation-delay: 0.2s; }
+        .wave:nth-child(4) { animation-delay: 0.3s; }
+
+        @keyframes wave {
+            0%, 100% { height: 20px; }
+            50% { height: 40px; }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .info-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Voice Assistant</h1>
+        
+        <div class="status-bar">
+            <span class="status-indicator" id="statusIndicator"></span>
+            <span id="statusText">Disconnected</span>
+        </div>
+
+        <div class="info-box">
+            <strong>Instructions:</strong><br>
+            1. Click "Start Conversation" to begin<br>
+            2. Press and hold the microphone to speak<br>
+            3. Release to send your message<br>
+            4. Click "End Conversation" to save and exit
+        </div>
+
+        <div class="controls">
+            <button id="startBtn" class="btn-primary">Start Conversation</button>
+            <button id="endBtn" class="btn-danger" style="display: none;">End Conversation</button>
+        </div>
+
+        <div id="micContainer" style="display: none;">
+            <div class="mic-button" id="micButton">
+                🎤
+            </div>
+            <p style="text-align: center; color: #666;">
+                <span id="micStatus">Press and hold to speak</span>
+            </p>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <p>Processing...</p>
+        </div>
+
+        <div class="transcript-area" id="transcript"></div>
+    </div>
+
+    <script>
+        let ws;
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        let conversationStarted = false;
+
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        const startBtn = document.getElementById('startBtn');
+        const endBtn = document.getElementById('endBtn');
+        const micContainer = document.getElementById('micContainer');
+        const micButton = document.getElementById('micButton');
+        const micStatus = document.getElementById('micStatus');
+        const transcript = document.getElementById('transcript');
+        const loading = document.getElementById('loading');
+
+        // Connect to WebSocket
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
+            
+            ws.onopen = () => {
+                statusIndicator.classList.add('connected');
+                statusText.textContent = 'Connected';
+                console.log('Connected to server');
+            };
+            
+            ws.onclose = () => {
+                statusIndicator.classList.remove('connected');
+                statusText.textContent = 'Disconnected';
+                console.log('Disconnected from server');
+            };
+            
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                handleMessage(data);
+            };
+        }
+
+        // Handle incoming messages
+        function handleMessage(data) {
+            switch(data.type) {
+                case 'connected':
+                    console.log('Session ID:', data.session_id);
+                    break;
+                
+                case 'assistant_response':
+                    loading.classList.remove('active');
+                    
+                    if (!data.is_welcome) {
+                        addMessage('assistant', data.text);
+                    }
+                    
+                    // Play audio response
+                    const audio = new Audio('data:audio/wav;base64,' + data.audio);
+                    audio.play();
+                    break;
+                
+                case 'conversation_saved':
+                    console.log('Conversation saved to:', data.filename);
+                    break;
+                
+                case 'error':
+                    loading.classList.remove('active');
+                    addMessage('assistant', 'Error: ' + data.message);
+                    break;
+            }
+        }
+
+        // Start conversation
+        startBtn.addEventListener('click', async () => {
+            conversationStarted = true;
+            startBtn.style.display = 'none';
+            endBtn.style.display = 'inline-block';
+            micContainer.style.display = 'block';
+            
+            // Request microphone permission
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                setupMediaRecorder(stream);
+                
+                // Send start event to get welcome message
+                ws.send(JSON.stringify({ type: 'start_conversation' }));
+                loading.classList.add('active');
+            } catch (err) {
+                console.error('Microphone access denied:', err);
+                addMessage('assistant', 'Error: Could not access microphone. Please grant permission.');
+            }
+        });
+
+        // End conversation
+        endBtn.addEventListener('click', () => {
+            ws.send(JSON.stringify({ type: 'end_conversation' }));
+            conversationStarted = false;
+            endBtn.style.display = 'none';
+            startBtn.style.display = 'inline-block';
+            micContainer.style.display = 'none';
+            addMessage('assistant', '👋 Conversation ended. Your chat has been saved!');
+        });
+
+        // Setup media recorder
+        function setupMediaRecorder(stream) {
+            mediaRecorder = new MediaRecorder(stream);
+            
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+            
+            mediaRecorder.onstop = async () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                audioChunks = [];
+                
+                // Convert to base64 and send
+                const reader = new FileReader();
+                reader.readAsDataURL(audioBlob);
+                reader.onloadend = () => {
+                    const base64Audio = reader.result.split(',')[1];
+                    ws.send(JSON.stringify({ 
+                        type: 'user_audio', 
+                        audio: base64Audio 
+                    }));
+                    loading.classList.add('active');
+                };
+            };
+        }
+
+        // Microphone button handlers
+        micButton.addEventListener('mousedown', startRecording);
+        micButton.addEventListener('mouseup', stopRecording);
+        micButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startRecording();
+        });
+        micButton.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            stopRecording();
+        });
+
+        function startRecording() {
+            if (!conversationStarted || isRecording) return;
+            
+            audioChunks = [];
+            mediaRecorder.start();
+            isRecording = true;
+            micButton.classList.add('recording');
+            micStatus.textContent = 'Recording... Release to send';
+        }
+
+        function stopRecording() {
+            if (!isRecording) return;
+            
+            mediaRecorder.stop();
+            isRecording = false;
+            micButton.classList.remove('recording');
+            micStatus.textContent = 'Press and hold to speak';
+        }
+
+        // Add message to transcript
+        function addMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const label = document.createElement('div');
+            label.className = 'message-label';
+            label.textContent = sender === 'user' ? 'You' : 'Assistant';
+            
+            const content = document.createElement('div');
+            content.textContent = text;
+            
+            messageDiv.appendChild(label);
+            messageDiv.appendChild(content);
+            transcript.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            transcript.scrollTop = transcript.scrollHeight;
+        }
+
+        // Initialize WebSocket connection
+        connectWebSocket();
+    </script>
+</body>
+</html>

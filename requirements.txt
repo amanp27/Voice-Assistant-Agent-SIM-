@@ -1,0 +1,29 @@
+# Core web framework
+flask==3.0.0
+flask-socketio==5.3.5
+flask-cors==4.0.0
+
+# WebSocket and async support
+python-socketio==5.10.0
+eventlet==0.33.3
+
+# Speech-to-Text
+assemblyai==0.30.0
+
+# LLM
+openai==1.54.0
+
+# Text-to-Speech
+elevenlabs==1.9.0
+
+# Audio processing
+pydub==0.25.1
+
+# Utilities
+python-dotenv==1.0.0
+requests==2.31.0
+
+# Core web framework
+fastapi==0.108.0
+uvicorn[standard]==0.25.0
+websockets==12.0
